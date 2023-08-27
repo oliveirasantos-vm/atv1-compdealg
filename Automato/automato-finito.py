@@ -34,6 +34,13 @@ estados = lines[2].split(" ")
 estadosFinais = lines[3].split(" ")
 nodos = lines[4:]
 
+#Atividade 4----------------------------------
+for i, nodo in enumerate(nodos):
+    n = nodo.split(" ")
+    if n[2] == "":
+        nodos[i] = n[0]+" "+n[1]+" &"
+#Atividade 4----------------------------------
+
 print("Estado Inicial:", estadoInicial)
 print("Alfabeto:", alfabeto)
 print("Estados:", estados)
@@ -44,8 +51,10 @@ isLooping = True
 
 while isLooping == True:
 
-    word = input("Informe a palavra: ")
-
+    word = input("Informe a palavra: ")  
+    #Atividade 4----------------------------------
+    word = word.replace(" ", "&")
+    #Atividade 4----------------------------------
     estadoAtual = estadoInicial
 
     def findNodo(estado, letra):
