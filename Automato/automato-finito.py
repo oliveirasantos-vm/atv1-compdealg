@@ -34,27 +34,14 @@ estados = lines[2].split(" ")
 estadosFinais = lines[3].split(" ")
 nodos = lines[4:]
 
-#Atividade 4----------------------------------
-for i, nodo in enumerate(nodos):
-    n = nodo.split(" ")
-    if n[2] == "":
-        nodos[i] = n[0]+" "+n[1]+" &"
-#Atividade 4----------------------------------
-
 print("Estado Inicial:", estadoInicial)
 print("Alfabeto:", alfabeto)
 print("Estados:", estados)
 print("Estados Finais:", estadosFinais)
 print("Nodos:", nodos)
 
-isLooping = True
-
-while isLooping == True:
-
+def simulaAFD():
     word = input("Informe a palavra: ")  
-    #Atividade 4----------------------------------
-    word = word.replace(" ", "&")
-    #Atividade 4----------------------------------
     estadoAtual = estadoInicial
 
     def findNodo(estado, letra):
@@ -79,16 +66,67 @@ while isLooping == True:
                 print("|\nv")
             else:
                 if estadoAtual in estadosFinais:
+                    print("----------------")
                     print("\nTrue :)")
                 else:
+                    print("----------------")
                     print("\nFalse :( - "+estadoAtual+" não é estado final")
-    print("----------------")
-
-   
-    finalizar = input("Deseja finalizar? S - Sim; Qualquer outro - Não\n")
     
-    if finalizar == "S":
-        isLooping = False
-    
-print("Encerrando")
 
+def simulaAFND():
+    word = input("Informe a palavra: ")
+    word = word.replace(" ", "&")
+
+    estadosAtuais = {estadoInicial}
+
+    def findNodos(estados, letra):
+        next_estados = []
+        for estado in estados:
+            for nodo in nodos:
+                n = nodo.split(" ")
+                if n[0] == estado and letra == n[2]:
+                    next_estados.append(n[1])
+        return next_estados
+
+    print(estadosAtuais)
+
+    for i, l in enumerate(word):
+        next_estados = findNodos(estadosAtuais, l)
+        if not next_estados:
+            print("----------------")
+            print("False :( - Transição inválida")
+            break
+        else:
+            estadosAtuais = set(next_estados)
+            print(estadosAtuais, ", "+l)
+            if i == len(word) - 1:
+                print("----------------")
+                accepted = any(estado in estadosFinais for estado in estadosAtuais)
+                if accepted:
+                    print("True :)")
+                else:
+                    print("False :( - Nenhum estado final alcançado")
+
+def Main():
+    isLooping = True
+
+    while isLooping:
+        print("----------------")
+        print("Escolha uma opção:")
+        print("1 - Simular AFD")
+        print("2 - Simular AFND")
+        print("3 - Sair")
+
+        opcao = input("Digite o número da opção desejada: ")
+
+        if opcao == "1":
+            simulaAFD()
+        elif opcao == "2":
+            simulaAFND()
+        elif opcao == "3":
+            isLooping = False
+            print("Encerrando")
+        else:
+            print("Opção inválida.")
+
+Main()
